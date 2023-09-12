@@ -109,5 +109,38 @@ namespace Demo_WebApp.API.Controllers
                     .Formatters.JsonFormatter);
             }
         }
+
+        [HttpGet]
+        [Route("api/contacto/obtener")]
+        public IHttpActionResult ObtenerContactoRequests()
+        {
+            try
+            {
+                List<ContactoRequestModel> crList 
+                    = new List<ContactoRequestModel>();
+                using (MercaditoEntities context =
+                    new MercaditoEntities())
+                {
+                    foreach (var item in context.ContactoRequest)
+                    {
+                        crList.Add(new ContactoRequestModel()
+                        {
+                            Email = item.email,
+                            id = item.id,
+                            Nombre= item.nombre,
+                        });
+                    }
+                }
+                return Content<List<ContactoRequestModel>>
+                        (HttpStatusCode.OK,
+                    crList, Configuration.Formatters.JsonFormatter);
+            }
+            catch (Exception ex)
+            {
+                return Content<Exception>(HttpStatusCode
+                    .InternalServerError, ex, Configuration
+                    .Formatters.JsonFormatter);
+            }
+        }
     }
 }
