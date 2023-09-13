@@ -91,12 +91,19 @@ namespace Demo_WebApp.API.Controllers
                 using (MercaditoEntities context
                     = new MercaditoEntities())
                 {
-                    context.ContactoRequest.Add(new ContactoRequest()
+                    ContactoRequest nuevo = new ContactoRequest()
                     {
                         nombre = model.nombre,
-                        email = model.email
-                    });
+                        email = model.email,
+                        asunto = model.asunto,
+                        contactar = model.contactar,
+                        mensaje = model.mensaje,
+                        noticias = model.noticias,
+                        prioridad = model.prioridad
+                    };
+                    context.ContactoRequest.Add(nuevo);
                     context.SaveChanges();
+                    model.id = nuevo.id;
                     return Content<ContactoRequestModel>
                         (HttpStatusCode.Created,
                     model, Configuration.Formatters.JsonFormatter);
@@ -116,7 +123,7 @@ namespace Demo_WebApp.API.Controllers
         {
             try
             {
-                List<ContactoRequestModel> crList 
+                List<ContactoRequestModel> crList
                     = new List<ContactoRequestModel>();
                 using (MercaditoEntities context =
                     new MercaditoEntities())
@@ -127,7 +134,12 @@ namespace Demo_WebApp.API.Controllers
                         {
                             email = item.email,
                             id = item.id,
-                            nombre= item.nombre,
+                            nombre = item.nombre,
+                            asunto = item.asunto,
+                            contactar = item.contactar ?? false,
+                            mensaje = item.mensaje,
+                            noticias = item.noticias ?? false,
+                            prioridad = item.prioridad ?? 1
                         });
                     }
                 }
