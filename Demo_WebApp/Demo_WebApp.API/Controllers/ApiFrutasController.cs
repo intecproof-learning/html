@@ -93,8 +93,8 @@ namespace Demo_WebApp.API.Controllers
                 {
                     context.ContactoRequest.Add(new ContactoRequest()
                     {
-                        nombre = model.Nombre,
-                        email = model.Email
+                        nombre = model.nombre,
+                        email = model.email
                     });
                     context.SaveChanges();
                     return Content<ContactoRequestModel>
@@ -125,9 +125,9 @@ namespace Demo_WebApp.API.Controllers
                     {
                         crList.Add(new ContactoRequestModel()
                         {
-                            Email = item.email,
+                            email = item.email,
                             id = item.id,
-                            Nombre= item.nombre,
+                            nombre= item.nombre,
                         });
                     }
                 }
