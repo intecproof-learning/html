@@ -2,7 +2,6 @@
 using Demo_WebApp.API.Models;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
 using System.Net;
 using System.Threading;
@@ -146,6 +145,46 @@ namespace Demo_WebApp.API.Controllers
                 return Content<List<ContactoRequestModel>>
                         (HttpStatusCode.OK,
                     crList, Configuration.Formatters.JsonFormatter);
+            }
+            catch (Exception ex)
+            {
+                return Content<Exception>(HttpStatusCode
+                    .InternalServerError, ex, Configuration
+                    .Formatters.JsonFormatter);
+            }
+        }
+
+        [HttpGet]
+        [Route("api/contacto/obtener/{requestID}")]
+        public IHttpActionResult ObtenerContactoRequest
+            (Int32 requestID)
+        {
+            try
+            {
+                ContactoRequestModel model =
+                     new ContactoRequestModel();
+
+                using (MercaditoEntities context =
+                    new MercaditoEntities())
+                {
+                    var item = context.ContactoRequest
+                        .Where(cr => cr.id == requestID).First();
+
+                    model = new ContactoRequestModel()
+                    {
+                        email = item.email,
+                        id = item.id,
+                        nombre = item.nombre,
+                        asunto = item.asunto,
+                        contactar = item.contactar ?? false,
+                        mensaje = item.mensaje,
+                        noticias = item.noticias ?? false,
+                        prioridad = item.prioridad ?? 1
+                    };
+                }
+                return Content<ContactoRequestModel>
+                        (HttpStatusCode.OK,
+                    model, Configuration.Formatters.JsonFormatter);
             }
             catch (Exception ex)
             {
