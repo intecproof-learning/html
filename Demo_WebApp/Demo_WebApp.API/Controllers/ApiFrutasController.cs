@@ -193,5 +193,40 @@ namespace Demo_WebApp.API.Controllers
                     .Formatters.JsonFormatter);
             }
         }
+
+        [HttpPut]
+        [Route("api/contacto/actualizar/{requestID}")]
+        public IHttpActionResult ActualizarContactoRequest
+            (Int32 requestID, ContactoRequestModel model)
+        {
+            try
+            {
+                using (MercaditoEntities context =
+                    new MercaditoEntities())
+                {
+                    var itemBd = context.ContactoRequest
+                        .Where(cr => cr.id == requestID).First();
+                    itemBd.nombre = model.nombre;
+                    itemBd.email = model.email;
+                    itemBd.asunto = model.asunto;
+                    itemBd.mensaje = model.mensaje;
+                    itemBd.noticias = model.noticias;
+                    itemBd.contactar = model.contactar;
+                    itemBd.prioridad = model.prioridad;
+
+                    context.SaveChanges();
+                }
+
+                return Content<ContactoRequestModel>
+                        (HttpStatusCode.OK,
+                    model, Configuration.Formatters.JsonFormatter);
+            }
+            catch (Exception ex)
+            {
+                return Content<Exception>(HttpStatusCode
+                    .InternalServerError, ex, Configuration
+                    .Formatters.JsonFormatter);
+            }
+        }
     }
 }
