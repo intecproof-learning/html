@@ -228,5 +228,35 @@ namespace Demo_WebApp.API.Controllers
                     .Formatters.JsonFormatter);
             }
         }
+
+        [HttpDelete]
+        [Route("api/contacto/eliminar/{requestID}")]
+        public IHttpActionResult EliminarContactoRequest
+            (Int32 requestID)
+        {
+            try
+            {
+                using (MercaditoEntities context =
+                    new MercaditoEntities())
+                {
+                    var itemBd = context.ContactoRequest
+                        .Where(cr => cr.id == requestID).First();
+
+                    context.ContactoRequest.Remove(itemBd);
+
+                    context.SaveChanges();
+                }
+
+                return Content<ContactoRequestModel>
+                        (HttpStatusCode.OK,
+                    null, Configuration.Formatters.JsonFormatter);
+            }
+            catch (Exception ex)
+            {
+                return Content<Exception>(HttpStatusCode
+                    .InternalServerError, ex, Configuration
+                    .Formatters.JsonFormatter);
+            }
+        }
     }
 }
